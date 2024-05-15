@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown Timer</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: url('https://images.unsplash.com/photo-1601458498849-86bf5b9f8bc9?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') no-repeat;
+            background-size: cover;
+            text-align: center;
+        }
+
+        .container {
+            padding: 4rem 0;
+        }
+
+        h1 {
+            color: #d7dadb;
+            font-size: 3rem;
+        }
+
+        table {
+            margin: auto;
+            border-collapse: collapse;
+            width: 50%;
+        }
+
+        th, td {
+            padding: 1rem;
+        }
+
+        th {
+            color: #ffffff;
+        }
+
+        input[type="date"], input[type="time"] {
+            font-size: 1.5rem;
+            padding: 1rem;
+            border-radius: 10px;
+            border: none;
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.7);
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        input[type="date"]:focus, input[type="time"]:focus {
+            background-color: rgba(255, 255, 255, 1);
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn {
+            min-width: 120px;
+            margin: 20px 10px;
+            padding: 10px;
+            font-size: 1rem;
+            background-color: rgba(25, 25, 26, 0.283);
+            border-radius: 5px;
+            border: none;
+            color: #ffffff;
+            box-shadow: 0px 1px 7px rgba(12, 12, 12, 0.26);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+
+        .btn:hover {
+            box-shadow: 0 0 5px rgba(24,34,38,255), 0 0 0px rgba(24,34,38,255), 0 0 0px rgba(24,34,38,255), 0 0 50px rgba(24,34,38,255), 00 0px rgba(24,34,38,255);
+        }
+
+        .countdown {
+            display: flex;
+            justify-content: center;
+        }
+
+        .heading {
+            color: #f5f5f5;
+            font-size: 1rem;
+            text-transform: uppercase;
+        }
+
+        .time {
+            background-color: rgba(240, 240, 240, 0.4);
+            color: #ffffff;
+            font-size: 2rem;
+            box-shadow: 0px 2px 7px rgba(16, 110, 203, 0.25);
+            width: 150px;
+            margin: 0 10px;
+            border-radius: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Countdown Timer</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Enter Date</th>
+                    <th>Enter Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="date" id="date"></td>
+                    <td><input type="time" id="time"></td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="btn" id="calculate">Start</button>
+        <button class="btn" id="stop">Stop</button>
+        <button class="btn" id="reset">Reset</button>
+
+        <div class="countdown">
+            <div>
+                <p class="heading">DAY</p>
+                <div class="time" id="countdown-days">0</div>
+            </div>
+            <div>
+                <p class="heading">HOURS</p>
+                <div class="time" id="countdown-hours">0</div>
+            </div>
+            <div>
+                <p class="heading">MINUTES</p>
+                <div class="time" id="countdown-minutes">0</div>
+            </div>
+            <div>
+                <p class="heading">SECONDS</p>
+                <div class="time" id="countdown-seconds">0</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.onload = () => {
+            document.querySelector('#calculate').onclick = calculate;
+            document.querySelector('#reset').onclick = reset;
+        }
+
+        function calculate() {
+            const date = document.querySelector("#date").value;
+            const time = document.querySelector("#time").value;
+            const stop = document.querySelector('#stop');
+            const endTime = new Date(date + " " + time);
+            const interval = setInterval(() => calculateTime(endTime), 1000);
+            stop.addEventListener('click', () => {
+                clearInterval(interval);
+            })
+        }
+
+        function calculateTime(endTime) {
+            const currentTime = new Date();
+            const days = document.querySelector('#countdown-days');
+            const hours = document.querySelector('#countdown-hours');
+            const minutes = document.querySelector('#countdown-minutes');
+            const seconds = document.querySelector('#countdown-seconds');
+
+            if (endTime > currentTime) {
+                const timeLeft = (endTime - currentTime) / 1000;
+                days.innerText = Math.floor(timeLeft / (24 * 60 * 60));
+                hours.innerText = Math.floor((timeLeft / (60 * 60)) % 24);
+                minutes.innerText = Math.floor((timeLeft / 60) % 60);
+                seconds.innerText = Math.floor(timeLeft % 60);
+            } else {
+                days.innerText = 0
+                hours.innerText = 0
+                minutes.innerText = 0
+                seconds.innerText = 0
+            }
+        }
+
+        function reset() {
+            document.querySelector('#countdown-days').innerText = 0;
+            document.querySelector('#countdown-hours').innerText = 0;
+            document.querySelector('#countdown-minutes').innerText = 0;
+            document.querySelector('#countdown-seconds').innerText = 0;
+        }
+    </script>
+</body>
+</html>
